@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  width: 100%;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+  background-color: whitesmoke;
+  color: #464646;
+}
+
+.leftSide {
+  display: flex;
+  gap: 2rem;
+  margin-right: auto;
+}
+
+.companyLogo {
+  width: 12rem;
+  height: auto;
+  margin-right: auto;
+}

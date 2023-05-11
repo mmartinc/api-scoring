@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from 'zod';
+import { createEnv } from '@t3-oss/env-nextjs';
 
 export const env = createEnv({
   /**
@@ -7,7 +7,7 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
-    NODE_ENV: z.enum(["development", "test", "production"]),
+    NODE_ENV: z.enum(['development', 'test', 'production']),
   },
 
   /**
@@ -17,6 +17,11 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+    // NEXT_PUBLIC_SERVER_PROTOCOL: z.string(),
+    // NEXT_PUBLIC_SERVER_IP_ADDRESS: z.string(),
+    // NEXT_PUBLIC_SERVER_PORT: z.string(),
+    // NEXT_PUBLIC_API_BASE_PATH: z.string(),
+    // NEXT_PUBLIC_API_VERSION: z.string(),
   },
 
   /**
@@ -25,6 +30,11 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    // NEXT_PUBLIC_SERVER_PROTOCOL: process.env.NEXT_PUBLIC_SERVER_PROTOCOL,
+    // NEXT_PUBLIC_SERVER_IP_ADDRESS: process.env.NEXT_PUBLIC_SERVER_IP_ADDRESS,
+    // NEXT_PUBLIC_SERVER_PORT: process.env.NEXT_PUBLIC_SERVER_PORT,
+    // NEXT_PUBLIC_API_BASE_PATH: process.env.NEXT_PUBLIC_API_BASE_PATH,
+    // NEXT_PUBLIC_API_VERSION: process.env.NEXT_PUBLIC_API_VERSION,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
 });
