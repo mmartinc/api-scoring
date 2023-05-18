@@ -137,7 +137,7 @@ const SpectralReport: NextPage = () => {
                 className={styles.revealButton}
                 onClick={() => setIsReportOnDisplay(!isReportOnDisplay)}
               >
-                {isReportOnDisplay ? '<' : '>'}
+                {isReportOnDisplay ? '>' : '<'}
               </div>
               <ScrollArea>
                 <IframeResizer
