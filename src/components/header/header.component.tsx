@@ -21,12 +21,12 @@ export const Header = () => {
         </Link>
         <Link href='/modules/design/reports'>
           <Button active={router.asPath === '/modules/design/reports'}>
-            Design
+            Diseño
           </Button>
         </Link>
         <Link href='/modules/implementation/reports'>
           <Button active={router.asPath === '/modules/implementation/reports'}>
-            Implementation
+            Implementación
           </Button>
         </Link>
       </div>

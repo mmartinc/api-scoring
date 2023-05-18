@@ -212,13 +212,23 @@
         }
 
         .btn-outline-success:hover {
-            background-color: var(--success);
-            border-color: var(--success);
+            background-color: var(--unacceptable);
+            border-color: var(--unacceptable);
+            color: var(--hov-text) !important;
+        }
+
+        .btn-outline-success:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 64, 77, 0.5) !important;
+        }
+
+        .btn-outline-success:active {
+            background-color: var(--unacceptable) !important;
+            border-color: var(--unacceptable) !important;
             color: var(--hov-text) !important;
         }
 
         .btn-outline-secondary {
-            background-color: var(--success) !important;
+            background-color: var(--unacceptable) !important;
             color: var(--hov-text) !important;
         }
 

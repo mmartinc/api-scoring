@@ -3,6 +3,7 @@ import { highlight, languages } from 'prismjs';
 import 'prismjs/components/prism-yaml';
 import 'prismjs/themes/prism.css';
 import styles from './code-block.module.css';
+import type { Grammar } from 'prismjs';
 
 export type CodeBlockProps = {
   code: string;
@@ -11,14 +12,14 @@ export type CodeBlockProps = {
 
 export const CodeBlock = (props: CodeBlockProps) => {
   return (
-    <main className={styles.container}>
+    <div className={styles.container}>
       <div className={styles.container__editor}>
         <div className={styles.container_editor_area}>
           <Editor
             value={props.code}
             onValueChange={props.onCodeChange}
             highlight={(code) =>
-              highlight(code, languages.yaml, 'yaml')
+              highlight(code, languages.yaml as Grammar, 'yaml')
                 .split('\n')
                 .map(
                   (line) =>
@@ -37,6 +38,6 @@ export const CodeBlock = (props: CodeBlockProps) => {
           />
         </div>
       </div>
-    </main>
+    </div>
   );
 };
