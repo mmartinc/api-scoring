@@ -124,7 +124,7 @@ const SpectralReport: NextPage = () => {
             <main
               className={classNames(
                 styles.main,
-                isReportOnDisplay ? styles.codeOnly : ''
+                !isReportOnDisplay ? styles.codeOnly : ''
               )}
             >
               <ScrollArea>
