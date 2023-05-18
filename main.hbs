@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow-y: scroll;">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AxPI Design Scoring </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css" />
+    <link rel="icon" type="icon" href="https://pbs.twimg.com/profile_images/1143472963657900033/u5dIrSjt_400x400.png">
+    <style>
+        code.renderMarkdown table,
+        code.renderMarkdown th,
+        code.renderMarkdown td {
+            border: 1px solid black;
+            width: max-content;
+            padding: .75rem;
+        }
+
+        .theme-light {
+            --tab-border: solid 1px #fff;
+            --text-color: #000000;
+            --summary: #ccc;
+            --unacceptable: #00404d;
+            --success: #009b5c;
+            --failure: #cd212a;
+            --warning: #f4bf3a;
+            --info: #007a8e;
+            --hint: #c0e3f0;
+            --popup: #f6f6f6;
+            --badge-outline: #040411;
+            --badge-bg: #f8f9fa;
+            --badge-text: #fff;
+            --failure-row: #f5c6cb;
+            --warning-row: #ffeeba;
+            --card-bg: #f7f7f7;
+            --hov-text: #fff;
+            --h4-text: #ffffff;
+        }
+
+        body {
+            padding-top: 30px;
+            background-color: var(--background-color) !important;
+            color: var(--text-color);
+        }
+
+        #execution-data {
+            padding: 10px;
+            border: var(--tab-border);
+            border-top: none;
+        }
+
+        .nav-tabs {
+            padding-top: 10px;
+            height: 105px;
+            overflow-y: auto;
+        }
+
+        body.theme-light .card-header {
+            background-color: #f7f7f7;
+        }
+
+        .card-footer {
+            padding: .75rem 1.25rem;
+            background-color: var(--card-footer);
+        }
+
+        .card-deck {
+            background-color: var(--bg-card-deck) !important;
+        }
+
+        .form-control {
+            background: var(--form-input);
+        }
+
+        .custom-tab {
+            padding: 10px 15px;
+            margin-right: 0px;
+            height: 47px;
+            width: 69px;
+            text-align: center;
+            border: var(--tab-border);
+            border-bottom: none;
+            cursor: pointer;
+        }
+
+        h4 {
+            color: var(--h4-text);
+        }
+
+        .bg-info {
+            background-color: var(--info) !important;
+        }
+
+        .bg-hint {
+            background-color: var(--hint) !important;
+        }
+
+        .bg-success {
+            background-color: var(--success) !important;
+        }
+
+        .alert-success {
+            background-color: var(--success) !important;
+        }
+
+        .alert-warning {
+            background-color: var(--warning) !important;
+        }
+
+        .alert-info {
+            background-color: var(--info) !important;
+        }
+
+        .alert-hint {
+            background-color: var(--hint) !important;
+        }
+
+        .bg-warning {
+            background-color: var(--warning) !important;
+        }
+
+        .bg-error {
+            background-color: var(--failure) !important;
+        }
+
+        .bg-summary {
+			background-color: var(--summary) !important;
+		}
+
+        .badge-warning {
+            color: var(--badge-text) !important;
+            background-color: var(--warning) !important;
+        }
+
+        .table-warning>td {
+            background-color: var(--warning-row);
+        }
+
+        .alert-danger {
+            background-color: var(--failure) !important;
+        }
+
+        .alert-error {
+            background-color: var(--failure) !important;
+        }
+
+        body.theme-light .badge-light {
+            color: #212529 !important;
+            background-color: #f8f9fa !important;
+        }
+
+        body.theme-light .bg-danger {
+            background-color: var(--failure) !important;
+        }
+
+        .bg-unacceptable {
+            background-color: var(--unacceptable) !important;
+        }
+
+        .alert-popup {
+            background-color: var(--popup) !important;
+            border-color: #d9d9d9;
+        }
+
+        .table-danger>td {
+            background-color: var(--failure-row);
+        }
+
+        .itPassed {
+            background: var(--success);
+            color: white;
+        }
+
+        .itFailed {
+            background: var(--failure);
+            color: white;
+        }
+
+        .resultsInfoPass {
+            color: var(--success);
+            padding-top: 4px;
+        }
+
+        .resultsInfoFail {
+            color: var(--failure);
+            padding-top: 4px;
+        }
+
+        .badge-outline-success {
+            color: var(--success);
+            border: 1px solid var(--success);
+            background-color: transparent;
+        }
+
+        .badge-outline {
+            color: var(--badge-outline);
+            border: 1px solid var(--badge-outline);
+            background-color: transparent;
+        }
+
+        .btn-outline-success {
+            color: var(--unacceptable) !important;
+            border-color: var(--unacceptable) !important;
+        }
+
+        .backToTop:hover {
+            background-color: var(--unacceptable);
+            border-color: var(--unacceptable);
+            color: var(--hov-text) !important;
+        }
+
+        .btn-outline-success:hover {
+            background-color: var(--success);
+            border-color: var(--success);
+            color: var(--hov-text) !important;
+        }
+
+        .btn-outline-secondary {
+            background-color: var(--success) !important;
+            color: var(--hov-text) !important;
+        }
+
+        .card {
+            overflow: hidden;
+        }
+
+        body.theme-light .card-body {
+            background-color: #f7f7f7;
+        }
+
+        body.theme-light .card-body .bg-danger {
+            background-color: var(--failure) !important;
+        }
+
+        .card-body .rotate {
+            z-index: 8;
+            float: right;
+        }
+
+        .card-body .rotate i {
+            color: #14141426;
+            position: absolute;
+            left: 0;
+            left: auto;
+            right: -10px;
+            bottom: 0;
+            display: block;
+            -webkit-transform: rotate(-44deg);
+            -moz-transform: rotate(-44deg);
+            -o-transform: rotate(-44deg);
+            -ms-transform: rotate(-44deg);
+            transform: rotate(-44deg);
+        }
+
+        .dyn-height {
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .backToTop {
+            display: none;
+            position: fixed;
+            bottom: 10px;
+            right: 20px;
+            z-index: 99;
+            font-size: 15px;
+            outline: none;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        .card-header .fa {
+            transition: .3s transform ease-in-out;
+        }
+
+        .card-header .collapsed .fa {
+            transform: rotate(90deg);
+        }
+
+        .single-line-tabs {
+            padding-top: 10px;
+            height: 60px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* The switch - the box around the slider */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 20px;
+        }
+
+        /* Hide default HTML checkbox */
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* The slider */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: 0.4s;
+            transition: 0.4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 0px;
+            bottom: 4px;
+            top: 0;
+            bottom: 0;
+            margin: auto 0;
+            -webkit-transition: 0.4s;
+            transition: 0.4s;
+            box-shadow: 0 0px 15px #2020203d;
+            background: white;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        input:checked+.slider {
+            background-color: #4083b6;
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #4083b6;
+        }
+
+        input:checked+.slider:before {
+            -webkit-transform: translateX(24px);
+            -ms-transform: translateX(24px);
+            transform: translateX(24px);
+            background: white;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        table.dataTable td,
+        table.dataTable tr {
+            vertical-align: middle;
+        }
+
+        body.theme-light code {
+            color: #000000 !important;
+        }
+
+        .text-wrap {
+            word-wrap: break-word;
+            min-width: 600px;
+            max-width: 600px;
+            white-space: normal;
+        }
+
+        .text-dark {
+            color: #00404d !important;
+        }
+        
+        .text-dark:hover {
+            color: #00404d !important;
+        }
+
+        .text-error {
+            color: #fff !important;
+        }
+
+        .text-error:hover {
+            color: #fff !important;
+        }
+
+        .text-warning {
+            color: #fff !important;
+        }
+
+        .text-warning:hover {
+            color: #fff !important;
+        }
+
+        .text-info {
+            color: #fff !important;
+        }
+
+        .text-info:hover {
+            color: #fff !important;
+        }
+
+        .text-hint {
+            color: #00404d !important;
+        }
+
+        .text-hint:hover {
+            color: #00404d !important;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: transparent !important;
+        }
+
+
+    </style>
+	<script>
+		!function(a){if("undefined"!=typeof window){var r=!0,P="",u=0,c="",s=null,D="",d=!1,j={resize:1,click:1},l=128,q=!0,f=1,n="bodyOffset",m=n,H=!0,W="",h={},g=32,B=null,p=!1,v=!1,y="[iFrameSizer]",J=y.length,w="",U={max:1,min:1,bodyScroll:1,documentElementScroll:1},b="child",V=!0,X=window.parent,T="*",E=0,i=!1,Y=null,O=16,S=1,K="scroll",M=K,Q=window,G=function(){x("onMessage function not defined")},Z=function(){},$=function(){},_={height:function(){return x("Custom height calculation function not defined"),document.documentElement.offsetHeight},width:function(){return x("Custom width calculation function not defined"),document.body.scrollWidth}},ee={},te=!1;try{var ne=Object.create({},{passive:{get:function(){te=!0}}});window.addEventListener("test",ae,ne),window.removeEventListener("test",ae,ne)}catch(e){}var oe,o,I,ie,N,A,C={bodyOffset:function(){return document.body.offsetHeight+ye("marginTop")+ye("marginBottom")},offset:function(){return C.bodyOffset()},bodyScroll:function(){return document.body.scrollHeight},custom:function(){return _.height()},documentElementOffset:function(){return document.documentElement.offsetHeight},documentElementScroll:function(){return document.documentElement.scrollHeight},max:function(){return Math.max.apply(null,e(C))},min:function(){return Math.min.apply(null,e(C))},grow:function(){return C.max()},lowestElement:function(){return Math.max(C.bodyOffset()||C.documentElementOffset(),we("bottom",Te()))},taggedElement:function(){return be("bottom","data-iframe-height")}},z={bodyScroll:function(){return document.body.scrollWidth},bodyOffset:function(){return document.body.offsetWidth},custom:function(){return _.width()},documentElementScroll:function(){return document.documentElement.scrollWidth},documentElementOffset:function(){return document.documentElement.offsetWidth},scroll:function(){return Math.max(z.bodyScroll(),z.documentElementScroll())},max:function(){return Math.max.apply(null,e(z))},min:function(){return Math.min.apply(null,e(z))},rightMostElement:function(){return we("right",Te())},taggedElement:function(){return be("right","data-iframe-width")}},re=(oe=Ee,N=null,A=0,function(){var e=Date.now(),t=O-(e-(A=A||e));return o=this,I=arguments,t<=0||O<t?(N&&(clearTimeout(N),N=null),A=e,ie=oe.apply(o,I),N||(o=I=null)):N=N||setTimeout(Oe,t),ie});k(window,"message",function(t){var n={init:function(){W=t.data,X=t.source,se(),q=!1,setTimeout(function(){H=!1},l)},reset:function(){H?R("Page reset ignored by init"):(R("Page size reset by host page"),Me("resetPage"))},resize:function(){L("resizeParent","Parent window requested size check")},moveToAnchor:function(){h.findTarget(i())},inPageLink:function(){this.moveToAnchor()},pageInfo:function(){var e=i();R("PageInfoFromParent called from parent: "+e),$(JSON.parse(e)),R(" --")},message:function(){var e=i();R("onMessage called from parent: "+e),G(JSON.parse(e)),R(" --")}};function o(){return t.data.split("]")[1].split(":")[0]}function i(){return t.data.slice(t.data.indexOf(":")+1)}function r(){return t.data.split(":")[2]in{true:1,false:1}}function e(){var e=o();e in n?n[e]():("undefined"==typeof module||!module.exports)&&"iFrameResize"in window||window.jQuery!==a&&"iFrameResize"in window.jQuery.prototype||r()||x("Unexpected message ("+t.data+")")}y===(""+t.data).slice(0,J)&&(!1===q?e():r()?n.init():R('Ignored message of type "'+o()+'". Received before initialization.'))}),k(window,"readystatechange",Ne),Ne()}function ae(){}function k(e,t,n,o){e.addEventListener(t,n,!!te&&(o||{}))}function ue(e){return e.charAt(0).toUpperCase()+e.slice(1)}function ce(e){return y+"["+w+"] "+e}function R(e){p&&"object"==typeof window.console&&console.log(ce(e))}function x(e){"object"==typeof window.console&&console.warn(ce(e))}function se(){function e(e){return"true"===e}function t(e,t){return"function"==typeof e&&(R("Setup custom "+t+"CalcMethod"),_[t]=e,e="custom"),e}{var n;n=W.slice(J).split(":"),w=n[0],u=a===n[1]?u:Number(n[1]),d=a===n[2]?d:e(n[2]),p=a===n[3]?p:e(n[3]),g=a===n[4]?g:Number(n[4]),r=a===n[6]?r:e(n[6]),c=n[7],m=a===n[8]?m:n[8],P=n[9],D=n[10],E=a===n[11]?E:Number(n[11]),h.enable=a!==n[12]&&e(n[12]),b=a===n[13]?b:n[13],M=a===n[14]?M:n[14],v=a===n[15]?v:e(n[15]),R("Initialising iFrame ("+window.location.href+")"),"iFrameResizer"in window&&Object===window.iFrameResizer.constructor&&(n=window.iFrameResizer,R("Reading data from page: "+JSON.stringify(n)),Object.keys(n).forEach(de,n),G="onMessage"in n?n.onMessage:G,Z="onReady"in n?n.onReady:Z,T="targetOrigin"in n?n.targetOrigin:T,m="heightCalculationMethod"in n?n.heightCalculationMethod:m,M="widthCalculationMethod"in n?n.widthCalculationMethod:M,m=t(m,"height"),M=t(M,"width"))}function o(e){F(0,0,e.type,e.screenY+":"+e.screenX)}function i(e,t){R("Add event listener: "+t),k(window.document,e,o)}R("TargetOrigin for parent set to: "+T),le("margin",function(e,t){-1!==t.indexOf("-")&&(x("Negative CSS value ignored for "+e),t="");return t}("margin",c=a===c?u+"px":c)),le("background",P),le("padding",D),(n=document.createElement("div")).style.clear="both",n.style.display="block",n.style.height="0",document.body.appendChild(n),he(),ge(),document.documentElement.style.height="",document.body.style.height="",R('HTML & body height set to "auto"'),R("Enable public methods"),Q.parentIFrame={autoResize:function(e){return!0===e&&!1===r?(r=!0,pe()):!1===e&&!0===r&&(r=!1,fe("remove"),null!==s&&s.disconnect(),clearInterval(B)),F(0,0,"autoResize",JSON.stringify(r)),r},close:function(){F(0,0,"close")},getId:function(){return w},getPageInfo:function(e){"function"==typeof e?($=e,F(0,0,"pageInfo")):($=function(){},F(0,0,"pageInfoStop"))},moveToAnchor:function(e){h.findTarget(e)},reset:function(){Ie("parentIFrame.reset")},scrollTo:function(e,t){F(t,e,"scrollTo")},scrollToOffset:function(e,t){F(t,e,"scrollToOffset")},sendMessage:function(e,t){F(0,0,"message",JSON.stringify(e),t)},setHeightCalculationMethod:function(e){m=e,he()},setWidthCalculationMethod:function(e){M=e,ge()},setTargetOrigin:function(e){R("Set targetOrigin: "+e),T=e},size:function(e,t){L("size","parentIFrame.size("+((e||"")+(t?","+t:""))+")",e,t)}},!0===v&&(i("mouseenter","Mouse Enter"),i("mouseleave","Mouse Leave")),pe(),h=function(){function n(e){var e=e.getBoundingClientRect(),t={x:window.pageXOffset===a?document.documentElement.scrollLeft:window.pageXOffset,y:window.pageYOffset===a?document.documentElement.scrollTop:window.pageYOffset};return{x:parseInt(e.left,10)+parseInt(t.x,10),y:parseInt(e.top,10)+parseInt(t.y,10)}}function o(e){var e=e.split("#")[1]||e,t=decodeURIComponent(e),t=document.getElementById(t)||document.getElementsByName(t)[0];a===t?(R("In page link (#"+e+") not found in iFrame, so sending to parent"),F(0,0,"inPageLink","#"+e)):(t=n(t=t),R("Moving to in page link (#"+e+") at x: "+t.x+" y: "+t.y),F(t.y,t.x,"scrollToOffset"))}function e(){var e=window.location.hash,t=window.location.href;""!==e&&"#"!==e&&o(t)}function t(){Array.prototype.forEach.call(document.querySelectorAll('a[href^="#"]'),function(e){"#"!==e.getAttribute("href")&&k(e,"click",function(e){e.preventDefault(),o(this.getAttribute("href"))})})}function i(){Array.prototype.forEach&&document.querySelectorAll?(R("Setting up location.hash handlers"),t(),k(window,"hashchange",e),setTimeout(e,l)):x("In page linking not fully supported in this browser! (See README.md for IE8 workaround)")}h.enable?i():R("In page linking not enabled");return{findTarget:o}}(),L("init","Init message from host page"),Z()}function de(e){var t=e.split("Callback");2===t.length&&(this[t="on"+t[0].charAt(0).toUpperCase()+t[0].slice(1)]=this[e],delete this[e],x("Deprecated: '"+e+"' has been renamed '"+t+"'. The old method will be removed in the next major version."))}function le(e,t){a!==t&&""!==t&&"null"!==t&&R("Body "+e+' set to "'+(document.body.style[e]=t)+'"')}function t(n){var e={add:function(e){function t(){L(n.eventName,n.eventType)}ee[e]=t,k(window,e,t,{passive:!0})},remove:function(e){var t=ee[e];delete ee[e],window.removeEventListener(e,t,!1)}};n.eventNames&&Array.prototype.map?(n.eventName=n.eventNames[0],n.eventNames.map(e[n.method])):e[n.method](n.eventName),R(ue(n.method)+" event listener: "+n.eventType)}function fe(e){t({method:e,eventType:"Animation Start",eventNames:["animationstart","webkitAnimationStart"]}),t({method:e,eventType:"Animation Iteration",eventNames:["animationiteration","webkitAnimationIteration"]}),t({method:e,eventType:"Animation End",eventNames:["animationend","webkitAnimationEnd"]}),t({method:e,eventType:"Input",eventName:"input"}),t({method:e,eventType:"Mouse Up",eventName:"mouseup"}),t({method:e,eventType:"Mouse Down",eventName:"mousedown"}),t({method:e,eventType:"Orientation Change",eventName:"orientationchange"}),t({method:e,eventType:"Print",eventNames:["afterprint","beforeprint"]}),t({method:e,eventType:"Ready State Change",eventName:"readystatechange"}),t({method:e,eventType:"Touch Start",eventName:"touchstart"}),t({method:e,eventType:"Touch End",eventName:"touchend"}),t({method:e,eventType:"Touch Cancel",eventName:"touchcancel"}),t({method:e,eventType:"Transition Start",eventNames:["transitionstart","webkitTransitionStart","MSTransitionStart","oTransitionStart","otransitionstart"]}),t({method:e,eventType:"Transition Iteration",eventNames:["transitioniteration","webkitTransitionIteration","MSTransitionIteration","oTransitionIteration","otransitioniteration"]}),t({method:e,eventType:"Transition End",eventNames:["transitionend","webkitTransitionEnd","MSTransitionEnd","oTransitionEnd","otransitionend"]}),"child"===b&&t({method:e,eventType:"IFrame Resized",eventName:"resize"})}function me(e,t,n,o){return t!==e&&(e in n||(x(e+" is not a valid option for "+o+"CalculationMethod."),e=t),R(o+' calculation method set to "'+e+'"')),e}function he(){m=me(m,n,C,"height")}function ge(){M=me(M,K,z,"width")}function pe(){var e;!0===r?(fe("add"),e=g<0,window.MutationObserver||window.WebKitMutationObserver?e?ve():s=function(){function t(e){function t(e){!1===e.complete&&(R("Attach listeners to "+e.src),e.addEventListener("load",i,!1),e.addEventListener("error",r,!1),u.push(e))}"attributes"===e.type&&"src"===e.attributeName?t(e.target):"childList"===e.type&&Array.prototype.forEach.call(e.target.querySelectorAll("img"),t)}function o(e){R("Remove listeners from "+e.src),e.removeEventListener("load",i,!1),e.removeEventListener("error",r,!1),u.splice(u.indexOf(e),1)}function n(e,t,n){o(e.target),L(t,n+": "+e.target.src)}function i(e){n(e,"imageLoad","Image loaded")}function r(e){n(e,"imageLoadFailed","Image load failed")}function a(e){L("mutationObserver","mutationObserver: "+e[0].target+" "+e[0].type),e.forEach(t)}var u=[],c=window.MutationObserver||window.WebKitMutationObserver,s=function(){var e=document.querySelector("body");return s=new c(a),R("Create body MutationObserver"),s.observe(e,{attributes:!0,attributeOldValue:!1,characterData:!0,characterDataOldValue:!1,childList:!0,subtree:!0}),s}();return{disconnect:function(){"disconnect"in s&&(R("Disconnect body MutationObserver"),s.disconnect(),u.forEach(o))}}}():(R("MutationObserver not supported in this browser!"),ve())):R("Auto Resize disabled")}function ve(){0!==g&&(R("setInterval: "+g+"ms"),B=setInterval(function(){L("interval","setInterval: "+g)},Math.abs(g)))}function ye(e,t){return t=t||document.body,t=null===(t=document.defaultView.getComputedStyle(t,null))?0:t[e],parseInt(t,10)}function we(e,t){for(var n,o=t.length,i=0,r=ue(e),a=Date.now(),u=0;u<o;u++)i<(n=t[u].getBoundingClientRect()[e]+ye("margin"+r,t[u]))&&(i=n);return a=Date.now()-a,R("Parsed "+o+" HTML elements"),R("Element position calculated in "+a+"ms"),O/2<(a=a)&&R("Event throttle increased to "+(O=2*a)+"ms"),i}function e(e){return[e.bodyOffset(),e.bodyScroll(),e.documentElementOffset(),e.documentElementScroll()]}function be(e,t){var n=document.querySelectorAll("["+t+"]");return 0===n.length&&(x("No tagged elements ("+t+") found on page"),document.querySelectorAll("body *")),we(e,n)}function Te(){return document.querySelectorAll("body *")}function Ee(e,t,n,o){function i(){e in{init:1,interval:1,size:1}||!(m in U||d&&M in U)?e in{interval:1}||R("No change in size detected"):Ie(t)}function r(e,t){return!(Math.abs(e-t)<=E)}n=a===n?C[m]():n,o=a===o?z[M]():o,r(f,n)||d&&r(S,o)||"init"===e?(Se(),F(f=n,S=o,e)):i()}function Oe(){A=Date.now(),N=null,ie=oe.apply(o,I),N||(o=I=null)}function L(e,t,n,o){i&&e in j?R("Trigger event cancelled: "+e):(e in{reset:1,resetPage:1,init:1}||R("Trigger event: "+t),("init"===e?Ee:re)(e,t,n,o))}function Se(){i||(i=!0,R("Trigger event lock on")),clearTimeout(Y),Y=setTimeout(function(){i=!1,R("Trigger event lock off"),R("--")},l)}function Me(e){f=C[m](),S=z[M](),F(f,S,e)}function Ie(e){var t=m;m=n,R("Reset trigger event: "+e),Se(),Me("reset"),m=t}function F(e,t,n,o,i){!0===V&&(a===i?i=T:R("Message targetOrigin: "+i),R("Sending message to host page ("+(e=w+":"+(e+":"+t)+":"+n+(a===o?"":":"+o))+")"),X.postMessage(y+e,i))}function Ne(){"loading"!==document.readyState&&window.parent.postMessage("[iFrameResizerChild]Ready","*")}}();
+	</script>
+</head>
+
+<body class="theme-light">
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab" role="tablist">
+                    <li class="nav-item bg-summary" data-toggle="tooltip" title="Click to view the Summary">
+                        <a class="nav-link text-dark" id="pills-summary-tab" data-toggle="pill" href="#pills-summary"
+                            role="tab" aria-controls="pills-summary" aria-selected="true">Summary <span
+                                class="badge badge-light">49</span></a>
+                    </li>
+
+                    {{#each errors}}
+                    <li class="nav-item bg-{{type}}" data-toggle="tooltip" title="Click to view the {{type}} failed rules">
+                        <a class="nav-link text-white" id="pills-{{type}}-tab" data-toggle="pill" href="#pills-{{type}}"
+                            role="tab" aria-controls="pills-{{type}}" aria-selected="false"><span class="text-{{type}}">{{title}} </span><span
+                                class="badge badge-light">{{fails.length}}</span></a>
+                    </li>
+                    {{/each}}
+
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-summary" role="tabcard"
+                        aria-labelledby="pills-summary-tab">
+                        <div class="row">
+                            <div class="col-md-9 col-lg-12 main">
+                                <h5 class="text-center">{{date}}</h5>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-6">
+                                        {{#if case-5}}
+                                        <div class="card text-white card-dark">
+                                            <div class="card-body bg-unacceptable">
+                                                <div class="rotate">
+                                                    <i class="fas fa-dizzy fa-5x"></i>
+                                                </div>
+                                                <h6 class="text-uppercase">Scoring</h6>
+                                                <h4 class="text-uppercase">{{result}}</h4>
+                                                <h1 class="display-1">{{scoring}}</h1>
+                                            </div>
+                                        </div>
+                                        {{/if}}
+                                        {{#if case-4}}
+                                        <div class="card text-white card-dark">
+                                            <div class="card-body bg-danger">
+                                                <div class="rotate">
+                                                    <i class="far fa-frown fa-5x"></i>
+                                                </div>
+                                                <h6 class="text-uppercase">Scoring</h6>
+                                                <h4 class="text-uppercase">{{result}}</h4>
+                                                <h1 class="display-1">{{scoring}}</h1>
+                                            </div>
+                                        </div>
+                                        {{/if}}
+                                        {{#if case-3}}
+                                        <div class="card text-white card-warning">
+                                            <div class="card-body bg-warning">
+                                                <div class="rotate">
+                                                    <i class="far fa-meh fa-5x"></i>
+                                                </div>
+                                                <h6 class="text-uppercase">Scoring</h6>
+                                                <h4 class="text-uppercase">{{result}}</h4>
+                                                <h1 class="display-1">{{scoring}}</h1>
+                                            </div>
+                                        </div>
+                                        {{/if}}
+                                        {{#if case-2}}
+                                        <div class="card text-white card-info">
+                                            <div class="card-body bg-info">
+                                                <div class="rotate">
+                                                    <i class="far fa-smile fa-5x"></i>
+                                                </div>
+                                                <h6 class="text-uppercase">Scoring</h6>
+                                                <h4 class="text-uppercase">{{result}}</h4>
+                                                <h1 class="display-1">{{scoring}}</h1>
+                                            </div>
+                                        </div>
+                                        {{/if}}
+                                        {{#if case-1}}
+                                        <div class="card text-white card-primary">
+                                            <div class="card-body bg-hint">
+                                                <div class="rotate">
+                                                    <i class="far fa-grin fa-5x"></i>
+                                                </div>
+                                                <h6 class="text-uppercase text-dark">Scoring</h6>
+                                                <h4 class="text-uppercase text-dark">{{result}}</h4>
+                                                <h1 class="display-1 text-dark">{{scoring}}</h1>
+                                            </div>
+                                        </div>
+                                        {{/if}}
+                                        {{#if case-0}}
+                                        <div class="card text-white card-success">
+                                            <div class="card-body bg-success">
+                                                <div class="rotate">
+                                                    <i class="far fa-laugh fa-5x"></i>
+                                                </div>
+                                                <h6 class="text-uppercase">Scoring</h6>
+                                                <h4 class="text-uppercase">{{result}}</h4>
+                                                <h1 class="display-1">{{scoring}}</h1>
+                                            </div>
+                                        </div>
+                                        {{/if}}
+
+                                    </div>
+                                    <div class="col-lg-3 col-md-6">
+                                        <div class="card text-white card-success">
+                                            <div class="card-body bg-summary">
+                                                <div class="rotate">
+                                                    
+                                                    <i class="fa fa-list fa-4x"></i>
+                                                </div>
+                                                <h6 class="text-uppercase text-dark">Total Rules</h6>
+                                                <h4 class="text-uppercase text-dark"><br></h4>
+                                                <h1 class="display-1 text-dark">{{total-rules}}</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6">
+                                        <div class="card text-white card-danger">
+                                            <div class="card-body bg-success">
+                                                <div class="rotate">
+                                                    <i class="fas fa-check-circle fa-4x"></i>
+                                                </div>
+                                                <h6 class="text-uppercase">Passed Rules</h6>
+                                                <h4 class="text-uppercase"><br></h4>
+                                                <h1 class="display-1">{{total-passed-rules}}</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6">
+                                        <div class="card text-white card-info">
+                                            <div class="card-body bg-danger">
+                                                <div class="rotate">
+                                                    <i class="fa fa-times-circle fa-5x"></i>
+                                                </div>
+                                                <h6 class="text-uppercase">Failed Rules</h6>
+                                                <h4 class="text-uppercase"><br></h4>
+                                                <h1 class="display-1">{{total-failed-rules}}</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="col-sm-12 mb-3">
+                                                <div class="card border-info">
+                                                    <div class="card-body">
+                                                        <h5
+                                                            class="card-title text-uppercase text-white text-center bg-info">
+                                                            File Information</h5>
+                                                        <span><i class="fas fa-file-code"></i></span><strong>
+                                                            API:</strong>{{api-name}}<br>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12 mb-3">
+                                                <div class="card border-info">
+                                                    <div class="card-body">
+                                                        <h5
+                                                            class="card-title text-uppercase text-white text-center bg-info">
+                                                            API Description</h5>
+                                                        <div class="dyn-height">
+                                                            <code class="renderMarkdown">{{api-description}}</code>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12 mb-3">
+                                                <div class="card border-info">
+                                                    <div class="card-body">
+                                                        <h5
+                                                            class="card-title text-uppercase text-white text-center bg-info">
+                                                            Timings</h5>
+                                                        <span><i class="fas fa-stopwatch"></i></span><strong> Total run
+                                                            duration:</strong> {{time}}s<br>
+                                                        <span><i class="fas fa-stopwatch"></i></span><strong> Average
+                                                            time per rule:</strong> {{time-rule}}ms<br>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12 mb-3">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped table-bordered">
+                                                        <thead class="thead-inverse">
+                                                            <tr class="text-center">
+                                                                <th class="text-uppercase">Summary Item</th>
+                                                                <th class="text-uppercase">Total</th>
+                                                                <th class="text-uppercase">Failed</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {{#each errors}}
+                                                            <tr>
+                                                                <td>{{title}}</td>
+                                                                <td class="text-center">{{total}}</td>
+                                                                <td class="text-center">{{fails.length}}
+                                                                </td>
+                                                            </tr>
+                                                            {{/each}}
+                                                            <tr class="">
+                                                                <td>Total Rules</td>
+                                                                <td class="text-center">{{total-rules}}</td>
+                                                                <td class="text-center">{{total-failed-rules}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-group float-right" role="group" aria-label="Button Group">
+                            
+                            <button id="openAll" class="btn btn-outline-success btn-sm float-right"
+                                style="text-align: center; width: 140px;">Expand Folders</button>
+                            <button id="openAllRules" class="btn btn-outline-success btn-sm float-right"
+                                style="text-align: center; width: 140px;">Expand Rules</button>
+                        </div>
+
+                        <div class="text-uppercase" id="execution-menu">
+                            <h5>Full ruleset summary</h5>
+                        </div>
+                        {{#each ruleset-summary}}
+                        <div class="tab-content" id="execution-data">
+                            <div class="alert alert-dark text-uppercase text-center iteration-0">
+                                <a data-toggle="collapse" href="#" data-target="#folder-collapse-{{package}}"
+                                    aria-expanded="false" aria-controls="collapse" id="folder-{{package}}"
+                                    class="collapsed text-dark z-block">
+                                    <i class="float-left resultsInfoPass" style="color: #c24a3f; padding-top: 4px;"></i>
+                                    {{package}}<i class="float-lg-right fa fa-chevron-down"
+                                        style="padding-top: 5px;"></i>
+                                </a>
+                            </div>
+                            <div id="folder-collapse-{{package}}" class="collapse" aria-labelledby="folder-{{package}}">
+                                <div id="folder-{{package}}" class="card-deck iteration-0">
+                                    <div class="row iteration-0">
+                                        {{#each rules}}
+                                        <div class="col-sm-12 mb-3">
+                                            <div class="card-deck">
+                                                <div class="card iteration-0">
+                                                    <div class="card-header  text-center  iteration-0">
+                                                        <a data-toggle="collapse" href="#"
+                                                            data-target="#rule-collapse-{{code}}" aria-expanded="false"
+                                                            aria-controls="collapse" id="rule-{{code}}"
+                                                            class="collapsed text-dark z-block">
+                                                            {{#if passed}}
+                                                            <i class="fas fa-check-circle float-left resultsInfoPass"
+                                                                style="color: #009b5c; padding-top: 4px;"></i>
+                                                            {{else}}
+                                                            <i class="card-title fas fa-times-circle float-left resultsInfoPass"
+                                                                style="color: #cd212a; padding-top: 4px;"></i>
+
+                                                            {{/if}}
+                                                            {{name}}<i class="float-lg-right fa fa-chevron-down"
+                                                                style="padding-top: 5px;"></i>
+                                                        </a>
+                                                    </div>
+                                                    <div id="rule-collapse-{{code}}" class="collapse"
+                                                        aria-labelledby="rule-{{code}}">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-sm-12 mb-3">
+                                                                    <div class="card-deck">
+                                                                        <div class="card border-info"
+                                                                            style="width: 50rem;">
+                                                                            <div class="card-body">
+                                                                                <h5
+                                                                                    class="card-title text-uppercase text-white text-center bg-info">
+                                                                                    Description</h5>
+                                                                                <div class="dyn-height">
+                                                                                    <code
+                                                                                        class="renderMarkdown">{{description}}</code>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-sm-12 mb-3">
+                                                                    <div class="card-deck">
+                                                                        <div class="card border-info"
+                                                                            style="width: 50rem;">
+                                                                            {{#if passed}}
+                                                                            <div class="card-body">
+                                                                                <h5
+                                                                                    class="card-title text-uppercase text-white text-center bg-info">
+                                                                                    Rule Status</h5>
+                                                                                <div>
+                                                                                    <div class="progress"
+                                                                                        style="height: 40px;">
+                                                                                        <div class="progress-bar bg-success"
+                                                                                            style="width: 100%"
+                                                                                            role="progressbar">
+                                                                                            <h5
+                                                                                                style="padding-top:5px;">
+                                                                                                <strong>Passed</strong>
+                                                                                            </h5>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+
+                                                                            {{else}}
+                                                                            <div class="card-body">
+                                                                                <h5
+                                                                                    class="card-title text-uppercase text-white text-center bg-info">
+                                                                                    Rule Status</h5>
+                                                                                <div>
+                                                                                    <div class="progress"
+                                                                                        style="height: 40px;">
+                                                                                        <div class="progress-bar bg-danger"
+                                                                                            style="width: 100%"
+                                                                                            role="progressbar">
+                                                                                            <h5
+                                                                                                style="padding-top:5px;">
+                                                                                                <strong>Failed</strong>
+                                                                                            </h5>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <hr>
+
+                                                                                <div>
+                                                                                    <h5
+                                                                                        class="card-title text-uppercase text-white text-center bg-info">
+                                                                                        Fail ranges</h5>
+                                                                                    {{#each range}}
+                                                                                    <span><i
+                                                                                            class="fas fa-exclamation-circle"></i></span><strong>
+                                                                                        Lines:</strong> <span
+                                                                                        class="float-right badge-outline badge badge-success">
+                                                                                        {{lines}}</span><br>
+                                                                                    {{/each}}
+                                                                                </div>
+                                                                            </div>
+                                                                            {{/if}}
+
+
+
+                                                                        </div>
+                                                                        <div class="card border-info"
+                                                                            style="width: 50rem;">
+                                                                            <div class="card-body">
+                                                                                <h5
+                                                                                    class="card-title text-uppercase text-white text-center bg-info">
+                                                                                    Rule Information</h5>
+                                                                                <span><i
+                                                                                        class="fas fa-lightbulb"></i></span><strong>
+                                                                                    Severity:</strong> <span
+                                                                                    class="float-right badge-outline badge badge-success">{{severity}}</span><br>
+                                                                                <span><i
+                                                                                        class="fas fa-balance-scale"></i></span><strong>
+                                                                                    Criticality:</strong> <span
+                                                                                    class="float-right badge-outline badge badge-success">
+                                                                                    {{criticaly}}</span><br>
+                                                                                <span><i
+                                                                                        class="fas fa-weight"></i></span><strong>
+                                                                                    Score:</strong> <span
+                                                                                    class="float-right badge-outline badge badge-success">
+                                                                                    {{score}}</span><br>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{/each}}
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        {{/each}}
+                    </div>
+                    {{#each errors}}
+                    <div class="tab-pane fade" id="pills-{{type}}" role="tabcard" aria-labelledby="pills-{{type}}-tab">
+                        {{#if fails.length}}
+                        <div class="btn-group float-right" role="group" aria-label="Button Group">
+                            <button id="openAllFailed{{type}}" class="btn btn-outline-success btn-sm float-right"
+                                style="text-align: center; width: 185px;">Expand All Failed Rules</button>
+                        </div>
+                        <br>
+                        <br>
+
+                        <div class="alert alert-{{type}} text-uppercase text-center">
+                            <h4 class="text-{{type}}">Showing {{fails.length}} {{type}}s</h4>
+                        </div>
+                        {{#each fails}}
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                                <div class="card iteration-0">
+                                    <div class="card-header text-center  iteration-0">
+                                        <a data-toggle="collapse" href="#" data-target="#rule-collapse-{{../type}}-{{code}}"
+                                            aria-expanded="false" aria-controls="collapse" id="#rule-{{../type}}-{{code}}"
+                                            class="collapsed text-dark z-block">
+
+                                            {{name}}<i class="float-lg-right fa fa-chevron-down"
+                                                style="padding-top: 5px;"></i>
+                                        </a>
+                                    </div>
+                                    <div id="rule-collapse-{{../type}}-{{code}}" class="collapse"
+                                        aria-labelledby="rule-{{../type}}-{{code}}">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-12 mb-3">
+                                                    <div class="card-deck">
+                                                        <div class="card border-info" style="width: 50rem;">
+                                                            <div class="card-body">
+                                                                <h5
+                                                                    class="card-title text-uppercase text-white text-center bg-info">
+                                                                    Description</h5>
+                                                                <div class="dyn-height">
+                                                                    <code class="renderMarkdown">{{description}}</code>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 mb-3">
+                                                    <div class="card-deck">
+                                                        <div class="card border-info" style="width: 50rem;">
+                                                            {{#if passed}}
+                                                                            <div class="card-body">
+                                                                                <h5
+                                                                                    class="card-title text-uppercase text-white text-center bg-info">
+                                                                                    Rule Status</h5>
+                                                                                <div>
+                                                                                    <div class="progress"
+                                                                                        style="height: 40px;">
+                                                                                        <div class="progress-bar bg-success"
+                                                                                            style="width: 100%"
+                                                                                            role="progressbar">
+                                                                                            <h5
+                                                                                                style="padding-top:5px;">
+                                                                                                <strong>Passed</strong>
+                                                                                            </h5>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+
+                                                                            {{else}}
+                                                                            <div class="card-body">
+                                                                                <h5
+                                                                                    class="card-title text-uppercase text-white text-center bg-info">
+                                                                                    Rule Status</h5>
+                                                                                <div>
+                                                                                    <div class="progress"
+                                                                                        style="height: 40px;">
+                                                                                        <div class="progress-bar bg-danger"
+                                                                                            style="width: 100%"
+                                                                                            role="progressbar">
+                                                                                            <h5
+                                                                                                style="padding-top:5px;">
+                                                                                                <strong>Failed</strong>
+                                                                                            </h5>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <hr>
+
+                                                                                <div>
+                                                                                    <h5
+                                                                                        class="card-title text-uppercase text-white text-center bg-info">
+                                                                                        Fail ranges</h5>
+                                                                                    {{#each range}}
+                                                                                    <span><i
+                                                                                            class="fas fa-exclamation-circle"></i></span><strong>
+                                                                                        Lines:</strong> <span
+                                                                                        class="float-right badge-outline badge badge-success">
+                                                                                        {{lines}}</span><br>
+                                                                                    {{/each}}
+                                                                                </div>
+                                                                            </div>
+                                                                            {{/if}}
+                                                        </div>
+                                                        <div class="card border-info" style="width: 50rem;">
+                                                            <div class="card-body">
+                                                                <h5
+                                                                    class="card-title text-uppercase text-white text-center bg-info">
+                                                                    Rule Information</h5>
+                                                                <span><i class="fas fa-lightbulb"></i></span><strong>
+                                                                    Severity:</strong> <span
+                                                                    class="float-right badge-outline badge badge-success">{{severity}}</span><br>
+                                                                <span><i
+                                                                        class="fas fa-balance-scale"></i></span><strong>
+                                                                    Criticality:</strong> <span
+                                                                    class="float-right badge-outline badge badge-success">
+                                                                    {{criticaly}}</span><br>
+                                                                <span><i class="fas fa-weight"></i></span><strong>
+                                                                    Score:</strong> <span
+                                                                    class="float-right badge-outline badge badge-success">
+                                                                    {{score}}</span><br>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                        {{else}}
+                        <div class="alert alert-popup text-uppercase text-center">
+                            <br><br>
+                            <h1 class="text-center text-dark">There are no failed rules with {{type}} severity <span><i
+                                        class="far fa-thumbs-up"></i></span></h1><br><br>
+                        </div>
+                        {{/if}}
+                    
+
+
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+        <!-- Data Table Configuration -->
+
+        <script>
+            $(document).ready(function () {
+                $('.datatable').DataTable({
+                    "retrieve": true,
+                    "paging": false,
+                    "info": false,
+                    "fixedColumns": {
+                        "heightMatch": 'none'
+                    }
+                });
+            });
+        </script>
+
+        <!-- Tooltip Configuration -->
+
+        <script>
+            $(document).ready(function () {
+                $('[data-toggle="tooltip"]').tooltip({
+                    trigger: 'hover'
+                })
+            })
+        </script>
+
+        <!-- Show/Hide The Folders -->
+
+        <script>
+            $('#openAll').on('click', function (e) {
+                let clickCount = $(this).data("clickCount") || 1
+                switch (clickCount) {
+                    case 1:
+                        {{#each ruleset-summary}}
+                        $('#folder-{{package}}').removeClass('collapsed')
+                        $('#folder-collapse-{{package}}').addClass('show')
+                        {{/each}}
+                        $('#openAll').html("Collapse Folders");
+                        break;
+                    case 2:
+                        {{#each ruleset-summary}}
+                        $('#folder-{{package}}').addClass('collapsed')
+                        $('#folder-collapse-{{package}}').removeClass('show')
+                        {{/each}}
+                        $('#openAll').html("Expand Folders");
+                        break;
+                }
+                clickCount = clickCount > 1 ? 1 : ++clickCount;
+                $(this).data("clickCount", clickCount)
+            })
+        </script>
+
+        <!-- Show/Hide The Rules -->
+
+        <script>
+            $('#openAllRules').on('click', function (e) {
+                let clickCount = $(this).data("clickCount") || 1
+                switch (clickCount) {
+                    case 1:
+                        {{#each ruleset-summary}}
+                        {{#each rules}}
+                        $('#rule-{{code}}').removeClass('collapsed')
+                        $('#rule-collapse-{{code}}').removeClass('collapsed')
+                        $('#rule-{{code}}').addClass('show')
+                        $('#rule-collapse-{{code}}').addClass('show')
+                        {{/each}}
+                        {{/each}}
+                        $('#openAllRules').html("Collapse Rules");
+                        break;
+                    case 2:
+                        {{#each ruleset-summary}}
+                        {{#each rules}}
+                        $('#rule-{{code}}').addClass('collapsed')
+                        $('#rule-collapse-{{code}}').addClass('collapsed')
+                        $('#rule-{{code}}').removeClass('show')
+                        $('#rule-collapse-{{code}}').removeClass('show')
+                        {{/each}}
+                        {{/each}}
+                        $('#openAllRules').html("Expand Rules");
+                        break;
+                }
+                clickCount = clickCount > 1 ? 1 : ++clickCount;
+                $(this).data("clickCount", clickCount)
+            })
+        </script>
+
+        <!-- Show/Hide The Skipped Tests -->
+
+        <script>
+            $('#openAllSkipped').on('click', function (e) {
+                let clickCount = $(this).data("clickCount") || 1
+                switch (clickCount) {
+                    case 1:
+                        $('#skipped-4637b885-7d1b-4413-9fa1-dda063435040').removeClass('collapsed')
+                        $('#skipped-collapse-4637b885-7d1b-4413-9fa1-dda063435040').removeClass('collapsed')
+                        $('#skipped-4637b885-7d1b-4413-9fa1-dda063435040').addClass('show')
+                        $('#skipped-collapse-4637b885-7d1b-4413-9fa1-dda063435040').addClass('show')
+                        $('#openAllSkipped').html("Collapse All Skipped Tests");
+                        break;
+                    case 2:
+                        $('#skipped-4637b885-7d1b-4413-9fa1-dda063435040').addClass('collapsed')
+                        $('#skipped-collapse-4637b885-7d1b-4413-9fa1-dda063435040').addClass('collapsed')
+                        $('#skipped-4637b885-7d1b-4413-9fa1-dda063435040').removeClass('show')
+                        $('#skipped-collapse-4637b885-7d1b-4413-9fa1-dda063435040').removeClass('show')
+                        $('#openAllSkipped').html("Expand All Skipped Tests");
+                        break;
+                }
+                clickCount = clickCount > 1 ? 1 : ++clickCount;
+                $(this).data("clickCount", clickCount)
+            })
+        </script>
+
+        <!-- Show/Hide The Failures -->
+
+
+        {{#each errors}}
+        <script>
+            $('#openAllFailed{{type}}').on('click', function (e) {
+                let clickCount = $(this).data("clickCount") || 1
+                switch (clickCount) {
+                    case 1:
+                        {{#each fails}}                        
+                        failedItemHeading = $('#rule-{{../type}}-{{code}}').removeClass('collapsed').addClass('show');
+                        failedItemContent = $('#rule-collapse-{{../type}}-{{code}}').removeClass('collapsed').addClass('show');
+                        {{/each}}
+                        
+                        $('#openAllFailed{{type}}').html("Collapse All Failed Rules");
+                        break;
+                    case 2:
+                        {{#each fails}}                        
+                        failedItemHeading = $('#rule-{{../type}}-{{code}}').removeClass('show').addClass('collapsed');
+                        failedItemContent = $('#rule-collapse-{{../type}}-{{code}}').removeClass('show').addClass('collapsed');
+                        {{/each}}
+                        $('#openAllFailed{{type}}').html("Expand All Failed Rules");
+                        break;
+                }
+                clickCount = clickCount > 1 ? 1 : ++clickCount;
+                $(this).data("clickCount", clickCount)
+            })
+            
+        </script>
+        {{/each}}
+        
+        <!-- Pretty Print the Response Body-->
+
+        <script>
+            function isJSON(data) {
+                var ret = true;
+                try {
+                    JSON.parse(data);
+                } catch (e) {
+                    ret = false;
+                }
+                return ret;
+            }
+
+            function isXML(data) {
+                return (data.length > 0 && data[0] === '<');
+            }
+
+            // see https://gist.github.com/sente/1083506/d2834134cd070dbcc08bf42ee27dabb746a1c54d#gistcomment-2254622
+            function formatXML(data) {
+                const PADDING = ' '.repeat(2); // set desired indent size here
+                const reg = /(>)(<)(\/*)/g;
+                let pad = 0;
+                xml = data.replace(reg, '$1\r\n$2$3');
+
+                return xml.split('\r\n').map((node, index) => {
+                    let indent = 0;
+                    if (node.match(/.+<\/\w[^>]*>$/)) {
+                        indent = 0;
+                    } else if (node.match(/^<\/\w/) && pad > 0) {
+                        pad -= 1;
+                    } else if (node.match(/^<\w[^>]*[^\/]>.*$/)) {
+                        indent = 1;
+                    } else {
+                        indent = 0;
+                    }
+
+                    pad += indent;
+                    return PADDING.repeat(pad - indent) + node;
+                }).join('\r\n');
+            }
+
+            $(".prettyPrint").each(function () {
+                var data = $(this).text();
+                // Verify whether data is JSON
+                if (isJSON(data)) {
+                    obj = JSON.parse(data);
+                    data = JSON.stringify(obj, null, 2);
+                }
+                else if (isXML(data)) {
+                    data = formatXML(data);
+                }
+                $(this).text(data);
+            });
+        </script>
+
+
+        <!-- Copy Response Body To Clipboard -->
+
+        <script>
+            var clipboard = new ClipboardJS('.copyButton');
+
+            clipboard.on('success', function (e) {
+                e.clearSelection();
+                $(".copyButton").addClass("bg-success text-white")
+                e.trigger.textContent = '✔ Copied!';
+                window.setTimeout(function () {
+                    $(".copyButton").removeClass("bg-success text-white")
+                    e.trigger.textContent = 'Copy to Clipboard';
+                }, 2000);
+            });
+            clipboard.on('error', function (e) {
+                e.clearSelection();
+                $(".copyButton").addClass("bg-danger text-white")
+                e.trigger.textContent = '✗ Not Copied';
+                window.setTimeout(function () {
+                    $(".copyButton").removeClass("bg-danger text-white")
+                    e.trigger.textContent = 'Copy to Clipboard';
+                }, 2000);
+            });
+
+        </script>
+
+        <!-- Render the Description Markdown and link in the test failures -->
+
+        <script>
+            const remarkable = new Remarkable();
+
+            const descriptions = document.querySelectorAll(".renderMarkdown");
+            descriptions.forEach(description => {
+                description.innerHTML = renderHtmlFromMarkdown(description.textContent);
+            });
+            function renderHtmlFromMarkdown(markdown) {
+                return remarkable.render(trim(markdown));
+            }
+            function trim(string) {
+                return string ? string.replace(/^ +| +$/gm, "") : string;
+            }
+        </script>
+
+
+        <!-- Filter Action for the Iterations -->
+
+        <script>
+            $("#filterInput").on("input paste", function () {
+                var value = $(this).val();
+                $("#iterationList li").filter(function () {
+                    $("#showOnlyFailures").data("clickCount") ? $("#showOnlyFailures").click() : null;
+                    $(this).toggle($(this).text().indexOf(value) > -1)
+                });
+            });
+        </script>
+
+        <!-- Showing the Failed Interations -->
+
+        <script>
+            $('#showOnlyFailures').on('click', function (e) {
+                let clickCount = $(this).data("clickCount") || 1
+                $("#filterInput").val() != "" && clickCount == 1 ? $("#filterInput").val('').trigger('input') : null;
+                let selectedIteration = $('#iterationList li').filter(function () {
+                    return $(this).css('border-bottom').indexOf("solid") > -1 && $(this).hasClass('itFailed');
+                });
+                selectedIteration.length || clickCount > 1 ? null : $("#iterationList li.itFailed")[0].click()
+                $("#iterationList li.itPassed").toggle()
+                $("div.bg-success [id*=package]").parents('[class^="row rule-"]').toggle();
+                clickCount = clickCount > 1 ? 1 : ++clickCount;
+                clickCount > 1 ? $("#showOnlyFailures").html("Show All Rules") : $("#showOnlyFailures").html("Show Failed Rules");
+                $(this).data("clickCount", clickCount)
+            })
+        </script>
+</body>
+
+</html>

@@ -3,17 +3,24 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import styles from './report.module.css';
 import IframeResizer from 'iframe-resizer-react';
-import { getHTMLReport, getSpecificationList } from '~/api/html-report';
+import {
+  getApiSpec,
+  getHTMLReport,
+  getSpecificationList,
+} from '~/api/html-report';
 import { Sidebar } from '~/components/sidebar';
 import { ScrollArea } from '~/components/scroll-area';
 import classNames from 'classnames';
 import { Header } from '~/components/header';
 import error from 'next/error';
+import { CodeBlock } from '~/components/code-block';
 
 const SpectralReport: NextPage = () => {
   const [html, setHTML] = useState({ __html: '<h1>Cargando...</h1>' });
   const [specList, setSpecList] = useState<string[]>();
   const [selectedFile, setSelectedFile] = useState<string>();
+  const [code, setCode] = useState<string>();
+  const [isReportOnDisplay, setIsReportOnDisplay] = useState(true);
 
   useEffect(() => {
     async function loadSpecList() {
@@ -57,8 +64,28 @@ const SpectralReport: NextPage = () => {
         setHTML({ __html: '<h1>Hubo un error al cargar el reporte</h1>' });
       }
     }
+
+    async function getSpecFile(filename?: string) {
+      if (filename === undefined) return;
+
+      try {
+        const apiResponse = await getApiSpec({
+          service: 'spectral',
+          filename: filename,
+        }).then((response) => {
+          if (typeof response !== 'string') throw error;
+          return response;
+        });
+
+        setCode(apiResponse);
+      } catch (error) {
+        console.error(error);
+        setCode('Hubo un error al cargar el archivo');
+      }
+    }
     setHTML({ __html: '<h1>Cargando...</h1>' });
     void createMarkup(selectedFile);
+    void getSpecFile(selectedFile);
   }, [selectedFile]);
 
   return (
@@ -101,15 +128,34 @@ const SpectralReport: NextPage = () => {
                 </ScrollArea>
               </Sidebar>
             </div>
-            <main className={styles.main}>
-              <IframeResizer
-                // log
-                heightCalculationMethod='lowestElement'
-                srcDoc={html.__html}
-                className={styles.iframe}
-                checkOrigin={false}
-                width='100%'
-              />
+            <main
+              className={classNames(
+                styles.main,
+                isReportOnDisplay ? styles.codeOnly : ''
+              )}
+            >
+              <ScrollArea>
+                <CodeBlock
+                  code={code ?? ''}
+                  onCodeChange={(code) => setCode(code)}
+                />
+              </ScrollArea>
+              <div
+                className={styles.revealButton}
+                onClick={() => setIsReportOnDisplay(!isReportOnDisplay)}
+              >
+                {isReportOnDisplay ? '<' : '>'}
+              </div>
+              <ScrollArea>
+                <IframeResizer
+                  // log
+                  heightCalculationMethod='lowestElement'
+                  srcDoc={html.__html}
+                  className={styles.iframe}
+                  checkOrigin={false}
+                  scrolling
+                />
+              </ScrollArea>
             </main>
           </div>
         )}

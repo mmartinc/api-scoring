@@ -27,11 +27,13 @@
 }
 
 .iframe {
-  width: 1px;
-  flex-grow: 1;
   min-width: 100%;
   border: none;
+  max-height: calc(100vh - 6rem);
+  /* width: 1px;
+  flex-grow: 1;
   overflow-y: hidden;
+  height: 100vh; */
 }
 
 .backHome {
@@ -79,13 +81,33 @@
 
 .main {
   flex-grow: 1;
+  display: grid;
+  width: 100%;
+  grid-template-columns: 285px 15px minmax(0, 1fr);
+  align-items: flex-start;
+  height: calc(100vh - 6rem);
+}
+
+.codeOnly {
+  grid-template-columns: minmax(0, 1fr) 20px;
+  padding-right: 1rem;
 }
 
 .content {
   display: grid;
   gap: 1.5rem;
-  margin-top: 1rem;
+  padding-top: 1rem;
   width: 100%;
   grid-template-columns: 220px minmax(0, 1fr);
   align-items: flex-start;
+  overflow: hidden;
+}
+
+.revealButton {
+  display: flex;
+  background-color: #00404d;
+  color: white;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 }

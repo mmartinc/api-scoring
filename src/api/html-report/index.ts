@@ -28,3 +28,16 @@ export const getSpecificationList = async (props: getHTMLReportProps) => {
 
   return response;
 };
+
+export const getApiSpec = async (props: getHTMLReportProps) => {
+  const response: string | void = await api
+    .post<string>(`${props.service}/result/yaml`, {
+      specification_name: props.filename,
+    })
+    .then((res) => res.data)
+    .catch((error) => {
+      console.error(error);
+    });
+
+  return response;
+};
