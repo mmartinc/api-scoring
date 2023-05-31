@@ -16,7 +16,18 @@
 }
 
 .companyLogo {
-  width: 12rem;
+  width: 9rem;
   height: auto;
   margin-right: auto;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.title {
+  display: flex;
+  align-items: center;
 }

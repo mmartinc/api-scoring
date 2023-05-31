@@ -19,12 +19,12 @@ export const Header = () => {
             className={styles.companyLogo}
           />
         </Link>
-        <Link href='/modules/design/reports'>
+        <Link href='/modules/design/reports' className={styles.navLink}>
           <Button active={router.asPath === '/modules/design/reports'}>
             Diseño
           </Button>
         </Link>
-        <Link href='/modules/implementation/reports'>
+        <Link href='/modules/implementation/reports' className={styles.navLink}>
           <Button active={router.asPath === '/modules/implementation/reports'}>
             Implementación
           </Button>
