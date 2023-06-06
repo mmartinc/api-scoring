@@ -9,12 +9,11 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>AxPI Scoring</title>
+        <title>uXcoring</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <main className={styles.main}>
         <div className={styles.container}>
-          <h1 className={styles.title}>AxPI Scoring</h1>
+          <h1 className={styles.title}>uXcoring</h1>
           <Image
             src='/logo.png'
             alt='Company Logo'
@@ -24,13 +23,13 @@ const Home: NextPage = () => {
           />
           <div className={styles.cardRow}>
             <Link className={styles.card} href='/modules/design'>
-              <h3 className={styles.cardTitle}>Validar Diseño →</h3>
+              <h2 className={styles.cardTitle}>Validar Diseño&ensp;&gt;</h2>
               <div className={styles.cardText}>
                 Evaluación del diseño de APIs
               </div>
             </Link>
             <Link className={styles.card} href='/modules/implementation'>
-              <h3 className={styles.cardTitle}>Validar Implementación →</h3>
+              <h2 className={styles.cardTitle}>Validar Implementación&ensp;&gt;</h2>
               <div className={styles.cardText}>
                 Evaluación de la implementación de APIs
               </div>
@@ -39,15 +38,14 @@ const Home: NextPage = () => {
               className={classNames(styles.card, styles.longCard)}
               href='/modules/design/reports'
             >
-              <h3 className={styles.cardTitle}>Ver Informes →</h3>
+              <h2 className={styles.cardTitle}>Ver Informes&ensp;&gt;</h2>
               <div className={styles.cardText}>Ver informes de evaluación</div>
             </Link>
           </div>
           <div className={styles.cardRow}></div>
         </div>
-      </main>
     </>
-  );
+  )
 };
 
 export default Home;

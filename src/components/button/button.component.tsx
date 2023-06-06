@@ -6,12 +6,13 @@ export type ButtonProps = {
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   submit?: boolean;
   active?: boolean;
+  className?: string
 };
 
-export const Button = ({ children, onClick, submit, active }: ButtonProps) => {
+export const Button = ({ children, onClick, submit, active, className }: ButtonProps) => {
   return (
     <button
-      className={classNames(styles.container, active && styles.isActive)}
+      className={classNames(styles.container, active && styles.isActive, className)}
       onClick={onClick}
       type={submit ? 'submit' : 'button'}
     >

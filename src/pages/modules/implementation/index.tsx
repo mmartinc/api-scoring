@@ -32,10 +32,9 @@ const Portman: NextPage = () => {
     setProgress(0);
 
     uploadConfig({ service: 'portman', file: configFile });
-    await timeout(1000);
 
     for (const specificationFile of specificationFiles) {
-      if (!specificationFile.name.endsWith('.yaml')) {
+      if (!specificationFile.name.endsWith('.yaml') || !specificationFile.name.endsWith('.yml')) {
         console.log(
           `Skipping ${specificationFile.name} because it is not a YAML file.`
         );
@@ -46,7 +45,6 @@ const Portman: NextPage = () => {
       console.log(`Uploading ${specificationFile.name}...`);
       await uploadApiSpec({ service: 'portman', file: specificationFile });
       console.log(`Uploaded ${specificationFile.name}! Waiting 2 seconds...`);
-      await timeout(2000);
     }
 
     console.log('Done!');
@@ -60,7 +58,7 @@ const Portman: NextPage = () => {
   return (
     <>
       <Head>
-        <title>AxPI Scoring | Implementación</title>
+        <title>uXcoring | Implementación</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={styles.main}>
@@ -80,7 +78,7 @@ const Portman: NextPage = () => {
               <div className={styles.downloadSection}>
                 <span>Descargue la plantilla de configuración:</span>
                 <div className={styles.downloadButton}>
-                  <Button onClick={() => getConfig({ service: 'portman' })}>
+                  <Button className={styles.button} onClick={() => getConfig({ service: 'portman' })}>
                     <DownloadIcon />
                   </Button>
                 </div>
@@ -131,7 +129,7 @@ const Portman: NextPage = () => {
                 </>
               ) : (
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                <Button submit onClick={submitFiles}>
+                <Button submit onClick={submitFiles} className={styles.submitButton}>
                   Generar reporte
                 </Button>
               )}
@@ -142,9 +140,5 @@ const Portman: NextPage = () => {
     </>
   );
 };
-
-function timeout(delay: number) {
-  return new Promise((res) => setTimeout(res, delay));
-}
 
 export default Portman;

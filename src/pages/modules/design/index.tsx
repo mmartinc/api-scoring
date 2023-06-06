@@ -34,7 +34,7 @@ const Spectral: NextPage = () => {
     uploadConfig({ service: 'spectral', file: configFile });
 
     for (const specificationFile of specificationFiles) {
-      if (!specificationFile.name.endsWith('.yaml')) {
+      if (!specificationFile.name.endsWith('.yaml') || !specificationFile.name.endsWith('.yml')) {
         setProgress((prev) => prev + 1);
         continue;
       }
@@ -50,7 +50,7 @@ const Spectral: NextPage = () => {
   return (
     <>
       <Head>
-        <title>AxPI Scoring | Diseño</title>
+        <title>uXcoring | Diseño</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={styles.main}>
@@ -70,7 +70,7 @@ const Spectral: NextPage = () => {
               <div className={styles.downloadSection}>
                 <span>Descargue la plantilla de configuración:</span>
                 <div className={styles.downloadButton}>
-                  <Button onClick={() => getConfig({ service: 'spectral' })}>
+                  <Button className={styles.button} onClick={() => getConfig({ service: 'spectral' })}>
                     <DownloadIcon />
                   </Button>
                 </div>
@@ -121,7 +121,7 @@ const Spectral: NextPage = () => {
                 </>
               ) : (
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                <Button submit onClick={submitFiles}>
+                <Button submit onClick={submitFiles} className={styles.submitButton}>
                   Generar reporte
                 </Button>
               )}

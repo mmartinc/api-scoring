@@ -84,7 +84,7 @@ const SpectralReport: NextPage = () => {
   return (
     <>
       <Head>
-        <title>AxPI Scoring | Informes de Diseño</title>
+        <title>uXcoring | Informes de Diseño</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <div className={styles.container}>

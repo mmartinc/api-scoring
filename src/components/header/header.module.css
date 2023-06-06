@@ -5,8 +5,8 @@
   padding: 1rem;
   position: sticky;
   top: 0;
-  background-color: whitesmoke;
-  color: #464646;
+  background-color: white;
+  color: #2d373d;
 }
 
 .leftSide {
@@ -16,7 +16,7 @@
 }
 
 .companyLogo {
-  width: 9rem;
+  width: 12rem;
   height: auto;
   margin-right: auto;
 }
@@ -24,10 +24,25 @@
 .navLink {
   display: flex;
   align-items: center;
+  justify-content: center;
   text-decoration: none;
+  color: #526570;
 }
 
 .title {
   display: flex;
   align-items: center;
+}
+
+.isActive {
+  color: #D81E05;
+  font-weight: 700;
+  text-decoration: underline #D81E05 solid 4px;
+  text-underline-offset: 28px;
+}
+
+.home {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
 }

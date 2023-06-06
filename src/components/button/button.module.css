@@ -1,20 +1,14 @@
 .container {
-  border-radius: 9999px;
-  background-color: white;
-  padding: 0.75rem 2.5rem;
+  border-radius: 8px;
+  background-color: #D81E05;
   font-weight: 600;
-  color: #016a7f;
-  text-decoration-line: none;
-  transition: background-color 150ms cubic-bezier(0.5, 0, 0.2, 1);
+  color: white;
   cursor: pointer;
+  text-decoration-line: none;
+  transition: color 300ms ease 0ms, background-color 300ms ease 0ms;
 }
 
 .container:hover {
-  background-color: #00404d;
-  color: white;
-}
-
-.isActive {
-  background-color: #00404d;
+  background-color: #BE0F0F;
   color: white;
 }

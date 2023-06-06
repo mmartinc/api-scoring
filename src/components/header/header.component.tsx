@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './header.module.css';
-import { Button } from '../button';
 import { useRouter } from 'next/router';
+import classNames from 'classnames';
 
 export const Header = () => {
   const router = useRouter();
@@ -10,7 +10,7 @@ export const Header = () => {
   return (
     <header className={styles.container}>
       <div className={styles.leftSide}>
-        <Link href='/'>
+        <Link href='/' className={styles.home}>
           <Image
             src='/logo.png'
             alt='Logo'
@@ -19,18 +19,14 @@ export const Header = () => {
             className={styles.companyLogo}
           />
         </Link>
-        <Link href='/modules/design/reports' className={styles.navLink}>
-          <Button active={router.asPath === '/modules/design/reports'}>
-            Diseño
-          </Button>
+        <Link href='/modules/design/reports' className={classNames(styles.navLink, router.asPath === '/modules/design/reports' ? styles.isActive : '')}>
+            Diseño&ensp;&gt;
         </Link>
-        <Link href='/modules/implementation/reports' className={styles.navLink}>
-          <Button active={router.asPath === '/modules/implementation/reports'}>
-            Implementación
-          </Button>
+        <Link href='/modules/implementation/reports' className={classNames(styles.navLink, router.asPath === '/modules/implementation/reports' ? styles.isActive : '')}>
+            Implementación&ensp;&gt;
         </Link>
       </div>
-      <h1 className={styles.title}>AxPI Scoring</h1>
+      <h1 className={styles.title}>uXcoring</h1>
     </header>
   );
 };

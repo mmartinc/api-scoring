@@ -64,7 +64,7 @@ const PortmanReport: NextPage = () => {
   return (
     <>
       <Head>
-        <title>AxPI Scoring | Informes de Implementación</title>
+        <title>uXcoring | Informes de Implementación</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <div className={styles.container}>

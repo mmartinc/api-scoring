@@ -1,8 +1,10 @@
 .container {
   display: flex;
   flex-direction: column;
+  margin-bottom: 1rem;
 }
 
 .stepLabel {
+  color: #2d373d;
   padding: 0.5rem 0;
 }
